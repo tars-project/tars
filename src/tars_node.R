@@ -90,7 +90,6 @@ function(req){
 }
 #* @serializer custom_json
 #* @get /chain/show
-#* @html
 function(req)
 {
   render.html <- ""

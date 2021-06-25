@@ -19,5 +19,6 @@ custom_json <- function(){
 
 register_serializer("custom_json", custom_json)
 # Make sure you put the path to your blockchain-node-server.R script
-r <- plumb('src/tars_node.R')
-r$run(port = 8000)
+
+plumb('src/tars_node.R') %>%
+  pr_run(port = 8000)
