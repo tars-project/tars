@@ -86,11 +86,11 @@ ui <- dashboardPage(
         icon = icon("id-card")
       ),
       ## INTERACTIVE UI
-      # uiOutput("specific_sidebar")
-      conditionalPanel("input.met_prot_quant",
-                       uiOutput("MetProtQuantSidebarUI")),
-      conditionalPanel("input.met_prot_count",
-                       uiOutput("MetProtCountSidebarUI"))
+      sidebarMenuOutput("specific_sidebar")
+      # conditionalPanel("input.met_prot_quant",
+      #                  uiOutput("MetProtQuantSidebarUI")),
+      # conditionalPanel("input.met_prot_count",
+      #                  uiOutput("MetProtCountSidebarUI"))
       # conditionalPanel("input.rnaseq",
       # RNAseqSidebar)
     )
@@ -167,7 +167,7 @@ ui <- dashboardPage(
                 helpText("Description here"),
                 br(),
                 actionBttn(
-                  inputId = "met_prot_quant",
+                  inputId = "met_prot_quant_bttn",
                   label = "Go!",
                   size = "sm",
                   color = "primary",
@@ -182,7 +182,7 @@ ui <- dashboardPage(
                 helpText("Description here"),
                 br(),
                 actionBttn(
-                  inputId = "met_prot_count",
+                  inputId = "met_prot_count_bttn",
                   label = "Go!",
                   size = "sm",
                   color = "primary",
@@ -197,7 +197,7 @@ ui <- dashboardPage(
                 helpText("Description here"),
                 br(),
                 actionBttn(
-                  inputId = "rnaseq",
+                  inputId = "rnaseq_bttn",
                   label = "Go!",
                   size = "sm",
                   color = "primary",
@@ -212,7 +212,7 @@ ui <- dashboardPage(
                 helpText("Description here"),
                 br(),
                 actionBttn(
-                  inputId = "epigenomics",
+                  inputId = "epigenomics_bttn",
                   label = "Go!",
                   size = "sm",
                   color = "primary",
@@ -227,7 +227,7 @@ ui <- dashboardPage(
                 helpText("Description here"),
                 br(),
                 actionBttn(
-                  inputId = "multiomics",
+                  inputId = "multiomics_bttn",
                   label = "Go!",
                   size = "sm",
                   color = "primary",
@@ -242,7 +242,7 @@ ui <- dashboardPage(
                 helpText("Description here"),
                 br(),
                 actionBttn(
-                  inputId = "enrichment",
+                  inputId = "enrichment_bttn",
                   label = "Go!",
                   size = "sm",
                   color = "primary",
@@ -282,7 +282,7 @@ ui <- dashboardPage(
                 helpText("Description here"),
                 br(),
                 actionBttn(
-                  inputId = "sentiment_analysis",
+                  inputId = "sentiment_analysis_bttn",
                   label = "Go!",
                   size = "sm",
                   color = "primary",
@@ -375,17 +375,17 @@ server <- function(input, output, session) {
   #   shinyjs::disable("met_prot_quant")
   # })
   
-  output$MetProtQuantSidebarUI <- renderUI({
-    
-    MetProtQuantSidebar
-    
-  })
-
-  output$MetProtCountSidebarUI <- renderUI({
-    
-    MetProtCountSidebar
-    
-  })
+  # output$MetProtQuantSidebarUI <- renderUI({
+  #   
+  #   MetProtQuantSidebar
+  #   
+  # })
+  # 
+  # output$MetProtCountSidebarUI <- renderUI({
+  #   
+  #   MetProtCountSidebar
+  #   
+  # })
   
   # observeEvent(input$go, {
   #   values$myresults <- sample(1:20, 5, T)
@@ -408,17 +408,43 @@ server <- function(input, output, session) {
   #   })
   # })
   
+  
+  make_menu <- reactive({
+    if (req(input$met_prot_quant_bttn)) {
+      # return("")
+      
+      MetProtQuantSidebar
+      
+    }
+    
+    else if (req(input$met_prot_count_bttn)) {
+      # return("")
+      
+      MetProtCountSidebar
+      
+    } 
+    
+    else {
+      div()
+    }
+  })
+  
+  output$specific_sidebar <- renderMenu({
+    make_menu()
+  })
+  
+  
   # Render text when button is clicked
-  # output$specific_sidebar <- renderUI({
+  # output$specific_sidebar <- renderMenu({
   # 
-  #   if (input$met_prot_quant) {
+  #   if (input$met_prot_quant_bttn) {
   #     # return("")
   # 
   #       MetProtQuantSidebar
   # 
   #   }
   # 
-  #   else if (input$met_prot_count) {
+  #   if (input$met_prot_count_bttn) {
   #     # return("")
   # 
   #       MetProtCountSidebar
